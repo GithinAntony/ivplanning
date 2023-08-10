@@ -1,0 +1,242 @@
+{% extends 'layout.html' %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+<style>
+/* Create two equal columns that sits next to each other */
+.column {
+  -ms-flex: 50%; /* IE 10 */
+  flex: 50%;
+  padding: 0 4px;
+}
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+}
+
+  #chat2 .form-control {
+border-color: transparent;
+}
+
+#chat2 .form-control:focus {
+border-color: transparent;
+box-shadow: inset 0px 0px 0px 1px transparent;
+}
+
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}
+</style>
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+    <!-- ================ contact section start ================= -->
+      <section class="contact-section">
+<div class="container">
+
+<div class="row">
+<div class="col-lg-6">
+<h3><u>View Booking Request</u></h3>
+</div>
+<div class="col-sm-6" align="right">
+<a href="/industry/view-resume/{{ booking_details.unique_id }}" class="btn-sm btn-primary"> <i class="fas fa-plus"></i> VIEW UPLOADED RESUME </a>
+</div>
+<div class="col-lg-7">
+  <div class="col-lg-12">
+                               <dl>
+                               <dt>Cover Letter:</dt>
+                               <dd>{{ booking_details.cover_letter }}</dd>
+                               <dt>Student Details:</dt>
+                               <dd>{{ booking_details.students_details }}</dd>
+                               <dt>No of Students:</dt>
+                               <dd>{{ booking_details.number_of_students }} </dd>
+                              <dt>No Of Teachers:</dt>
+                              <dd>{{ booking_details.number_of_teachers }}</dd>
+                              <dt>Contact Mobile Number:</dt>
+                              <dd>{{ booking_details.mobile_number }}</dd>
+                              <dt>Contact Email Address:</dt>
+                              <dd>{{ booking_details.email }}</dd>
+                              <dt>Current Status:</dt>
+                              <dd style="text-transform: capitalize">{{ booking_details.status }}</dd>
+                              <dt>Date Added:</dt>
+                              <dd>{{ booking_details.created_at }}</dd>
+                             </dl>
+  </div>
+
+    <div class="col-lg-12">
+  <form class="form-contact" id="myform" action="" method="post" novalidate enctype="multipart/form-data">
+   {% csrf_token %}
+  {% if messages %}
+  <ul class="messages text-center">
+  {% for message in messages %}
+   <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+   {% endfor %}
+   </ul>
+   {% endif %}
+      <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <textarea class="form-control w-100" name="response_letter" id="response_letter" cols="30" rows="4" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Response Letter'" placeholder=" Responser Letter" >{{ booking_details.industry_response_letter }}</textarea>
+            </div>
+        </div>
+        <div class="col-12">
+          <label for="change_status">Choose the request status</label>
+            <div class="form-group">
+              <select class="form-control" id="change_status" name="change_status" >
+              <option value="requested" {% if booking_details.status == 'requested' %} selected {% endif %} >Requested</option>
+              <option value="cancelled" {% if booking_details.status == 'cancelled' %} selected {% endif %} >Cancel Request</option>
+              <option value="accepted" {% if booking_details.status == 'accepted' %} selected {% endif %} >Accept Request</option>
+              </select>
+            </div>
+        </div>
+
+      </div>
+
+      <div class="form-group mt-3">
+          <button type="submit" class="button button-contactForm boxed-btn">Save</button>
+      </div>
+  </form>
+  </div>
+
+  <hr />
+
+  <div class="col-lg-12">
+  <b><u>MESSAGES</u></b>
+  </div>
+
+  <div class="col-lg-12">
+    <form action="/industry/add-messages/{{ booking_details.unique_id }}" method="POST" id="form_1">
+        {% csrf_token %}
+    <div class="row d-flex justify-content-center">
+            <div class="col-md-12">
+
+              <div class="card" id="chat2">
+                <div class="card-header d-flex justify-content-between align-items-center p-3">
+                  <h5 class="mb-0">Chat With College</h5>
+                </div>
+                <div class="card-body" data-mdb-perfect-scrollbar="true">
+    {% if user_messages.count > 0 %}
+    {% for row in user_messages %}
+    {% if row.status == 'industry' %}
+    <div class="d-flex flex-row justify-content-start mb-4">
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+          alt="avatar 1" style="width: 45px; height: 100%;">
+        <div>
+          <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">{{ row.messages_text }}</p>
+          <p class="small ms-3 mb-3 rounded-3 text-muted">{{ request.session.email }} {{ row.date_added }}</p>
+        </div>
+      </div>
+    {% endif %}
+    {% if row.status == 'colleges' %}
+    <div class="d-flex flex-row justify-content-end">
+      <div>
+        <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">{{ row.messages_text }}</p>
+        <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">College, {{ row.date_added }}</p>
+      </div>
+      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
+        alt="avatar 1" style="width: 45px; height: 100%;">
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <b>No messages added yet</b>
+    {% endif %}
+
+                </div>
+                <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+                    alt="avatar 3" style="width: 40px; height: 100%;">
+                  <input type="text" class="form-control form-control-lg" id="message" name="message" placeholder="Type message">
+                  <input type="submit" class="btn btn-success btn-md" value="Send" />
+                </div>
+              </div>
+
+            </div>
+    </div>
+    </form>
+  </div>
+
+
+</div>
+
+<div class="col-lg-5">
+  <div class="col-lg-12">
+  <h6><u>COLLEGE DETAILS</u></h6>
+  </div>
+  <div class="col-lg-12">
+  <img src="{{ booking_details.college.profile_image }}" style ="width: 100%" height="300" />
+  </div>
+  <div class="col-lg-12">
+                               <dl>
+                               <dt>College Name:</dt>
+                               <dd>{{ booking_details.college.college_name }}</dd>
+                               <dt>Land Phone Number:</dt>
+                               <dd>{{ booking_details.college.land_phone }}</dd>
+                               <dt>Address:</dt>
+                               <dd>{{ booking_details.college.address }}, Pin: {{ booking_details.college.pincode }}, State: {{ booking_details.college.state }} </dd>
+                              <dt>Website:</dt>
+                              <dd>{{ booking_details.college.website }}</dd>
+                              <dt>Land Phone:</dt>
+                              <dd>{{ booking_details.college.land_phone }}</dd>
+                              <dt>Mobile Number:</dt>
+                              <dd>{{ booking_details.college.mobile_number }}</dd>
+                              <dt>Email:</dt>
+                              <dd>{{ booking_details.college.email }}</dd>
+                              <dt>About College:</dt>
+                              <dd>{{ booking_details.college.about_college }}</dd>
+                              <dt>Date Added:</dt>
+                              <dd>{{ booking_details.college.created_at }}</dd>
+                             </dl>
+  </div>
+
+
+
+
+</div>
+
+</div>
+</div>
+</section>
+    <!-- ================ contact section end ================= -->
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#myform" ).validate({
+ ignore: [],
+  rules: {
+     response_letter: {
+      required: true,
+      minlength: 2,
+      maxlength: 3024
+    },
+    change_status: {
+     required: true,
+   }
+  }
+});
+
+$( "#form_1" ).validate({
+ ignore: [],
+ errorPlacement: function(error, element) {
+error.insertAfter(element.parent());
+},
+  rules: {
+        message: {
+          required: true,
+          minlength: 1,
+          maxlength: 255
+        },
+  }
+});
+
+});
+</script>
+{% endblock %}

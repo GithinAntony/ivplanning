@@ -1,0 +1,171 @@
+{% extends 'layout.html' %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+    <!-- ================ contact section start ================= -->
+      <section class="contact-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="contact-title">Registration</h2>
+                    </div>
+                    <div class="col-lg-8">
+                      <form class="form-contact" id="myform" action="" method="post" novalidate enctype="multipart/form-data">
+                       {% csrf_token %}
+                      {% if messages %}
+                      <ul class="messages text-center">
+                      {% for message in messages %}
+                       <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                       {% endfor %}
+                       </ul>
+                       {% endif %}
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <input class="form-control" name="college_name" id="college_name" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'College Name'" placeholder="College Name" value="{{ userdata.college_name }}">
+                                  </div>
+                              </div>
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <input class="form-control" name="website" id="website" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Website Url'" placeholder="Website Url" value="{{ userdata.website }}" >
+                                  </div>
+                              </div>
+
+
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <input class="form-control" name="land_phone" id="land_phone" type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Landline Number'" placeholder="Landline Number" value="{{ userdata.land_phone }}">
+                                  </div>
+                              </div>
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <input class="form-control" name="mobile_number" id="mobile_number" type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Mobile Number'" placeholder="Mobile Number" value="{{ userdata.mobile_number }}">
+                                  </div>
+                              </div>
+
+                               <div class="col-12">
+                                  <div class="form-group">
+                                      <input class="form-control" name="email_address" id="email_address" type="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" placeholder="Email" value="{{ userdata.email }}">
+                                  </div>
+                              </div>
+
+
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <input class="form-control" name="pincode" id="pincode" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Pincode'" placeholder="Pincode" value="{{ userdata.pincode }}">
+                                  </div>
+                              </div>
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <select class="form-control" style="width: 100% !Important" name="state" id="state">
+                                          <option class="kerala" {% if userdata.state == "kerala" %} selected {% endif %} >Kerala</option>
+                                      </select>
+                                  </div>
+                              </div>
+
+                              <div class="col-12">
+                                  <div class="form-group">
+                                      <textarea class="form-control w-100" name="address" id="address" cols="30" rows="4" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Address'" placeholder=" Address" >{{ userdata.address }}</textarea>
+                                  </div>
+                              </div>
+
+                              <div class="col-12">
+                                  <div class="form-group">
+                                      <textarea class="form-control w-100" name="about_college" id="about_college" cols="30" rows="6" onfocus="this.placeholder = ''" onblur="this.placeholder = 'About College'" placeholder=" About College">{{ userdata.about_college }}</textarea>
+                                  </div>
+                              </div>
+
+<div class="col-12">
+<img src="{{ userdata.profile_image }}" width="150" height="150" />
+</div>
+                              <div class="col-12">
+                                  <div class="form-group">
+                                    <input type="file" name="change_avatar" value="" style="width: -webkit-fill-available; height: auto; color: red;" />
+                                  </div>
+                              </div>
+
+                          </div>
+                          <div class="form-group mt-3">
+                              <button type="submit" class="button button-contactForm boxed-btn">Submit</button>
+                          </div>
+                      </form>
+                    </div>
+                    <div class="col-lg-3 offset-lg-1">
+  <h3>Approved By Government Of India</h3>
+<img src="{% static 'assets/img/emblem-dark.png' %}" width="AUTO">
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!-- ================ contact section end ================= -->
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#myform" ).validate({
+ ignore: [],
+  rules: {
+     industry_name: {
+      required: true,
+      minlength: 2,
+      maxlength: 255
+    },
+    website: {
+      required: true,
+      minlength: 2,
+      maxlength: 255
+    },
+       land_phone: {
+      required: true,
+      digits: true,
+      minlength: 8,
+      maxlength: 12,
+    },
+    mobile_number: {
+      required: true,
+      digits: true,
+      minlength: 9,
+      maxlength: 10,
+    },
+    email_address: {
+      required: true,
+      email: true,
+      minlength: 8,
+      maxlength: 255
+    },
+  pincode: {
+      required: true,
+      digits: true,
+      minlength: 6,
+      maxlength: 6,
+    },
+      state: {
+      required: true,
+    },
+    address: {
+      required: true,
+      minlength: 9,
+      maxlength: 1000,
+    },
+    about_industry: {
+        required: true,
+        minlength: 8,
+        maxlength: 500
+          },
+   change_avatar: {
+     extension:'png,jpg,jpeg',
+     filesize: 2097152,
+   },
+  }
+});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

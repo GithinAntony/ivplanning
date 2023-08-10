@@ -1,0 +1,159 @@
+{% extends 'layout.html' %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+<style>
+/* Create two equal columns that sits next to each other */
+.column {
+  -ms-flex: 50%; /* IE 10 */
+  flex: 50%;
+  padding: 0 4px;
+}
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+}
+</style>
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+    <!-- ================ contact section start ================= -->
+      <section class="contact-section">
+<div class="container">
+
+<div class="row">
+<div class="col-lg-12">
+<h3><u>Book Your Industrial Visit</u></h3>
+</div>
+
+<div class="col-lg-8">
+  <form class="form-contact" id="myform" action="" method="post" novalidate enctype="multipart/form-data">
+   {% csrf_token %}
+  {% if messages %}
+  <ul class="messages text-center">
+  {% for message in messages %}
+   <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+   {% endfor %}
+   </ul>
+   {% endif %}
+      <div class="row">
+
+        <div class="col-12">
+            <div class="form-group">
+                <textarea class="form-control w-100" name="cover_letter" id="cover_letter" cols="30" rows="4" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Cover Letter'" placeholder=" Cover Letter" ></textarea>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-group">
+                <textarea class="form-control w-100" name="students_details" id="students_details" cols="30" rows="4" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Students/Batch Details'" placeholder="Students/Batch Details" ></textarea>
+            </div>
+        </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <input class="form-control" name="number_of_students" id="number_of_students" type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Number Of Students Visiting'" placeholder="Number Of Students" value="">
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <input class="form-control" name="number_of_teachers" id="number_of_teachers" type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Number Of Teachers Visiting'" placeholder="Number Of Teachers Visiting" value="">
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <input class="form-control" name="contact_mobile_number" id="contact_mobile_number" type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Contact Mobile Number'" placeholder="Contact Mobile Number" value="">
+              </div>
+          </div>
+           <div class="col-sm-6">
+              <div class="form-group">
+                  <input class="form-control" name="contact_email_address" id="contact_email_address" type="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Contact Email Address'" placeholder="Contact Email Address" value="">
+              </div>
+          </div>
+      </div>
+      <div class="form-group mt-3">
+          <button type="submit" class="button button-contactForm boxed-btn">Submit</button>
+      </div>
+  </form>
+</div>
+
+<div class="col-lg-4">
+<div class="row">
+<div class="col-lg-12">
+<img src="{{ datalist.profile_image }}" style ="width: 100%" height="300" />
+</div>
+<div class="col-lg-12">
+                             <dl>
+                             <dt>Industry Name:</dt>
+                             <dd>{{ datalist.industry_name }}</dd>
+                             <dt>Mobile Number:</dt>
+                             <dd>{{ datalist.mobile_number }}</dd>
+                             <dt>Address:</dt>
+                             <dd>{{ datalist.address }}, Pin: {{ datalist.pincode }}, State: {{ datalist.state }} </dd>
+                            <dt>Website:</dt>
+                            <dd>{{ datalist.website }}</dd>
+                            <dt>Land Phone:</dt>
+                            <dd>{{ datalist.land_phone }}</dd>
+                            <dt>Email:</dt>
+                            <dd>{{ datalist.email }}</dd>
+                            <dt>About Industry:</dt>
+                            <dd>{{ datalist.about_industry }}</dd>
+                            <dt>Date Added:</dt>
+                            <dd>{{ datalist.created_at }}</dd>
+                           </dl>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+    <!-- ================ contact section end ================= -->
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#myform" ).validate({
+ ignore: [],
+  rules: {
+     cover_letter: {
+      required: true,
+      minlength: 2,
+      maxlength: 3024
+    },
+    students_details: {
+     required: true,
+     minlength: 2,
+     maxlength: 3024
+   },
+    number_of_students: {
+      required: true,
+      digits: true,
+      minlength: 1,
+      maxlength: 4,
+    },
+    number_of_teachers: {
+      required: true,
+      digits: true,
+      minlength: 1,
+      maxlength: 4,
+    },
+    contact_mobile_number: {
+      required: true,
+      digits: true,
+      minlength: 9,
+      maxlength: 10,
+    },
+    contact_email_address: {
+      required: true,
+      email: true,
+      minlength: 8,
+      maxlength: 255
+    },
+  }
+});
+});
+</script>
+{% endblock %}

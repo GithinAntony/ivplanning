@@ -1,0 +1,121 @@
+{% extends 'layout.html' %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+<style>
+/* Create two equal columns that sits next to each other */
+.column {
+  -ms-flex: 50%; /* IE 10 */
+  flex: 50%;
+  padding: 0 4px;
+}
+
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+}
+
+</style>
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+    <!-- ================ contact section start ================= -->
+      <section class="contact-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <h3><u>{{ datalist.industry_name }}</u></h3>
+                    </div>
+                    <div class="col-6" style="border: #fb246a thin solid" align="center">
+                      {% if 'is_logged_in' in request.session and request.session.usertype == 'colleges' %}
+                      {% if datalist_1.count > 0  %}
+<h6><u><b>PAST BOOOKINGS</b></u></h6>
+<table class="table">
+<tr class="thead">
+<th>#</th>
+<th>Date/Time</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+{% for i in datalist_1 %}
+<tr class="tbody">
+<td><span style="color: black">{{ forloop.counter }}</span></td>
+<td>{{ i.created_at }}</td>
+<td><span class="label label-primary" style="text-transform: capitalize; font-weight: bolder" >{{ i.status }}</span></td>
+<td>
+<a href="/colleges/view-industry/{{ i.unique_id }}/{{ i.industry_id }}" class="btn-sm btn-success"> <i class="fas fa-check"></i> view</a>
+<a href="/colleges/delete-industry/{{ i.unique_id }}" onclick="return confirm('Are you sure?')" class="btn-sm btn-danger"><i class="fas fa-times"></i> delete</a>
+</td>
+</tr>
+{% endfor %}
+</table>
+                      {% else %}
+                      <a href="{% url 'book_industry' id=datalist.unique_id %}" role="button" class="btn btn-sm" >Book Industry</a>
+                      {% endif %}
+                      {% else %}
+                      <b style="color: #fb246a"> Please login as a college user to book.</b>
+                      {% endif %}
+
+                    </div>
+                  <div class="col-12"> <p>&nbsp;</p> </div>
+                    <div class="col-lg-4">
+                    <img src="{{ datalist.profile_image }}" style ="width: 100%" height="300" />
+                    </div>
+                    <div class="col-lg-4">
+                             <dl>
+                             <dt>Industry Name:</dt>
+                             <dd>{{ datalist.industry_name }}</dd>
+                             <dt>Mobile Number:</dt>
+                             <dd>{{ datalist.mobile_number }}</dd>
+                             <dt>Address:</dt>
+                             <dd>{{ datalist.address }}, Pin: {{ datalist.pincode }}, State: {{ datalist.state }} </dd>
+                             <dt>Date Added:</dt>
+                             <dd>{{ datalist.created_at }}</dd>
+                            </dl>
+                      </div>
+                      <div class="col-lg-4">
+                               <dl>
+                               <dt>Website:</dt>
+                               <dd>{{ datalist.website }}</dd>
+                               <dt>Land Phone:</dt>
+                               <dd>{{ datalist.land_phone }}</dd>
+                               <dt>Email:</dt>
+                               <dd>{{ datalist.email }}</dd>
+                              </dl>
+                      </div>
+
+<div class="col-lg-12">
+  <p>&nbsp;</p>
+  <dl>
+  <dt>About Industry:</dt>
+  <dd>{{ datalist.about_industry }}</dd>
+ </dl>
+ <p>&nbsp;</p>
+</div>
+
+<div class="col-lg-12">
+  <!-- Header -->
+  <div class="header" id="myHeader">
+    <h1>Gallery Grid</h1>
+  </div>
+  <!-- Photo Grid -->
+  <div class="row">
+{% if datalist_gallery.count > 0 %}
+{% for i in datalist_gallery  %}
+    <div class="column">
+      <img src="{{ i.image }}" style="width:100%">
+    </div>
+{% endfor %}
+{% else %}
+<b>No images added!</b>
+{% endif %}
+  </div>
+</div>
+                </div>
+            </div>
+        </section>
+    <!-- ================ contact section end ================= -->
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+{% endblock %}

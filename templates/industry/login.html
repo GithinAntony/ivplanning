@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+    <!-- ================ contact section start ================= -->
+       <section class="contact-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="contact-title">Industry Log In</h2>
+                    </div>
+                    <div class="col-lg-8">
+                        <form class="form-contact contact_form" action="" method="post" id="myform">
+        {% csrf_token %}
+                        {% if messages %}
+                        <ul class="messages text-center">
+                        {% for message in messages %}
+                         <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                         {% endfor %}
+                         </ul>
+                         {% endif %}
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control valid" name="email_address" id="email_address" type="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'" placeholder="Email Address">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control valid" name="password" id="password" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" placeholder="Password">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="form-group mt-3">
+                                <button type="submit" class="button button-contactForm boxed-btn">Log In Here</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-3 offset-lg-1">
+  <h3>Approved By Government Of India</h3>
+<img src="{% static 'assets/img/emblem-dark.png' %}" width="AUTO" />
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!-- ================ contact section end ================= -->
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#myform" ).validate({
+ ignore: [],
+  rules: {
+    email_address: {
+      required: true,
+      email: true,
+      minlength: 1,
+      maxlength: 255,
+    },
+    password: {
+      required: true,
+      minlength: 1,
+      maxlength: 100,
+    },
+  }
+});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

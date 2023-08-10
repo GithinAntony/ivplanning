@@ -1,0 +1,158 @@
+{% extends 'layout.html' %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+<style>
+/* Create two equal columns that sits next to each other */
+.column {
+  -ms-flex: 50%; /* IE 10 */
+  flex: 50%;
+  padding: 0 4px;
+}
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+}
+</style>
+<link href="{% static 'datatables/datatables.css' %}" rel="stylesheet">
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+    <!-- ================ contact section start ================= -->
+      <section class="contact-section">
+<div class="container">
+
+<div class="row">
+<div class="col-lg-12">
+<h3><u>Upload Student Details/Resume </u></h3>
+</div>
+
+<div class="col-lg-8">
+{% if datalist.count > 0  %}
+<h6><u><b>PAST BOOOKINGS</b></u></h6>
+<table class="table" id="example">
+<thead>
+<tr>
+<th>#</th>
+<th>Date/Time</th>
+<th>Full Name</th>
+<th>Mobile Number</th>
+<th>Resume</th>
+<th>Actions</th>
+</tr>
+</thead>
+ <tbody>
+{% for i in datalist %}
+<tr>
+<td><span style="color: black">{{ forloop.counter }}</span></td>
+<td>{{ i.created_at }}</td>
+<td>{{ i.firstname }} {{ i.lastname }}</td>
+<td>{{ i.mobile_number }}</td>
+<td> <a href="{{ i.resume }}" style="color: blue" download>DOWNLOAD</a></td>
+<td>
+<a href="/colleges/delete-resume/{{ i.unique_id }}/{{ i.industry_booking_id }}/{{ i.industry_id }}" onclick="return confirm('Are you sure?')" class="btn-sm btn-danger"><i class="fas fa-times"></i> delete</a>
+</td>
+</tr>
+{% endfor %}
+ </tbody>
+</table>
+{% else %}
+<b>No resume uploaded</b>
+{% endif %}
+</div>
+
+<div class="col-lg-4">
+<div class="row">
+  <div class="col-12">
+  <h2 class="contact-title">Upload Resume Details</h2>
+  </div>
+
+  <form class="form-contact" id="myform" action="" method="post" novalidate enctype="multipart/form-data">
+   {% csrf_token %}
+  {% if messages %}
+  <ul class="messages text-center">
+  {% for message in messages %}
+   <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+   {% endfor %}
+   </ul>
+   {% endif %}
+      <div class="row">
+
+          <div class="col-sm-12">
+              <div class="form-group">
+                  <input class="form-control" name="firstname" id="firstname" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'First Name'" placeholder="First Name">
+              </div>
+          </div>
+          <div class="col-sm-12">
+              <div class="form-group">
+                  <input class="form-control" name="lastname" id="lastname" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Last Name'" placeholder="Last Name">
+              </div>
+          </div>
+
+
+          <div class="col-sm-12">
+              <div class="form-group">
+                  <input class="form-control" name="mobile_number" id="mobile_number" type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Mobile Number'" placeholder="Mobile Number">
+              </div>
+          </div>
+
+          <div class="col-12">
+              <div class="form-group">
+                <input type="file" name="upload_resume" value="" style="width: -webkit-fill-available; height: auto; color: red;" />
+              </div>
+          </div>
+
+      </div>
+      <div class="form-group mt-3">
+          <button type="submit" class="button button-contactForm boxed-btn">Submit</button>
+      </div>
+  </form>
+
+</div>
+</div>
+
+</div>
+</div>
+</section>
+    <!-- ================ contact section end ================= -->
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'datatables/datatables.js' %}"></script>
+<script>
+$(document).ready(function() {
+$('#example').DataTable();
+
+$( "#myform" ).validate({
+ ignore: [],
+  rules: {
+     firstname: {
+      digits:false,
+      required: true,
+      minlength: 2,
+      maxlength: 255
+    },
+    lastname: {
+      digits:false,
+      required: true,
+      minlength: 2,
+      maxlength: 255
+   },
+    mobile_number: {
+      required: true,
+      digits: true,
+      minlength: 10,
+      maxlength: 10,
+    },
+    upload_resume: {
+      required: true,
+      extension:'pdf,docx,doc',
+      filesize: 20097152,
+    },
+  }
+});
+});
+</script>
+{% endblock %}

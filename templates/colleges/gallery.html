@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+    <!-- ================ contact section start ================= -->
+      <section class="contact-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Gallery Photos</h3>
+                    </div>
+
+                    <div class="col-lg-6">
+                      {% if user_gallery %}
+                      <table class="table table-bordered table-sm">
+                          {% for i in user_gallery %}
+                          <tr>
+                              <td><span style="color: black">{{ forloop.counter }}</span></td>
+                              <td><img src="{{ i.image }}" height="100"></td>
+                              <td align="center">
+                                  <a href="/industry/gallery-delete/{{i.unique_id}}" onclick="return confirm('Are you sure you want to delete this item?');" class="btn-danger btn-sm"> <i class="fa fa-times"></i> Delete </a>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                      </table>
+                      {% else %}
+                      <b>No images added</b>
+                      {% endif %}
+                    </div>
+
+                    <div class="col-lg-6">
+                      <form class="form-contact" id="myform" action="" method="post" novalidate enctype="multipart/form-data">
+
+                       {% csrf_token %}
+                      {% if messages %}
+                      <ul class="messages text-center">
+                      {% for message in messages %}
+                       <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                       {% endfor %}
+                       </ul>
+                       {% endif %}
+
+                          <div class="row">
+                              <div class="col-sm-12">
+                                  <div class="form-group">
+                                    <input type="file" name="main_photo" id="main_photo"  />
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-group mt-3">
+                              <button type="submit" class="button button-contactForm boxed-btn">Submit</button>
+                          </div>
+                      </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!-- ================ contact section end ================= -->
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#myform" ).validate({
+  ignore: [],
+    rules: {
+      main_photo: {
+        required: true,
+        extension:'png,jpg,jpeg',
+        filesize: 2097152,
+      },
+    }
+});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

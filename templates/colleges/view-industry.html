@@ -1,0 +1,281 @@
+{% extends 'layout.html' %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+<style>
+/* Create two equal columns that sits next to each other */
+.column {
+  -ms-flex: 50%; /* IE 10 */
+  flex: 50%;
+  padding: 0 4px;
+}
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+}
+
+  #chat2 .form-control {
+border-color: transparent;
+}
+
+#chat2 .form-control:focus {
+border-color: transparent;
+box-shadow: inset 0px 0px 0px 1px transparent;
+}
+
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}
+</style>
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+    <!-- ================ contact section start ================= -->
+      <section class="contact-section">
+<div class="container">
+
+<div class="row">
+<div class="col-sm-6">
+<h3><u>Edit Industry Booking</u></h3>
+</div>
+<div class="col-sm-6" align="right">
+<a href="/colleges/upload-resume/{{ booking_details.unique_id }}/{{ booking_details.industry_id }}" class="btn-sm btn-primary"> <i class="fas fa-plus"></i> UPLOAD STUDENTS RESUME IN ADVANCE </a>
+</div>
+<div class="col-lg-7">
+    <div class="col-lg-12">
+  <form class="form-contact" id="myform" action="" method="post" novalidate enctype="multipart/form-data">
+   {% csrf_token %}
+  {% if messages %}
+  <ul class="messages text-center">
+  {% for message in messages %}
+   <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+   {% endfor %}
+   </ul>
+   {% endif %}
+      <div class="row">
+
+        <div class="col-12">
+            <div class="form-group">
+                <textarea class="form-control w-100" name="cover_letter" id="cover_letter" cols="30" rows="4" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Cover Letter'" placeholder=" Cover Letter" >{{ booking_details.cover_letter }}</textarea>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-group">
+                <textarea class="form-control w-100" name="students_details" id="students_details" cols="30" rows="4" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Students/Batch Details'" placeholder="Students/Batch Details" >{{ booking_details.students_details }}</textarea>
+            </div>
+        </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <input class="form-control" name="number_of_students" id="number_of_students" type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Number Of Students Visiting'" placeholder="Number Of Students" value="{{ booking_details.number_of_students }}">
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <input class="form-control" name="number_of_teachers" id="number_of_teachers" type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Number Of Teachers Visiting'" placeholder="Number Of Teachers Visiting" value="{{ booking_details.number_of_teachers }}">
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <input class="form-control" name="contact_mobile_number" id="contact_mobile_number" type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Contact Mobile Number'" placeholder="Contact Mobile Number" value="{{ booking_details.mobile_number }}">
+              </div>
+          </div>
+           <div class="col-sm-6">
+              <div class="form-group">
+                  <input class="form-control" name="contact_email_address" id="contact_email_address" type="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Contact Email Address'" placeholder="Contact Email Address" value="{{ booking_details.email }}">
+              </div>
+          </div>
+      </div>
+      <div class="form-group mt-3">
+          <button type="submit" class="button button-contactForm boxed-btn">Save</button>
+      </div>
+  </form>
+</div>
+
+  <div class="col-lg-12"><hr /></div>
+  <div class="col-lg-12">
+  <b><u>INDUSTRY DETAILS</u></b>
+  </div>
+  <div class="col-lg-12">
+    <div class="row">
+    <div class="col-lg-6">
+    <img src="{{ datalist.profile_image }}" style ="width: 100%" height="300" />
+    </div>
+    <div class="col-lg-12">
+                                 <dl>
+                                 <dt>Industry Name:</dt>
+                                 <dd>{{ datalist.industry_name }}</dd>
+                                 <dt>Mobile Number:</dt>
+                                 <dd>{{ datalist.mobile_number }}</dd>
+                                 <dt>Address:</dt>
+                                 <dd>{{ datalist.address }}, Pin: {{ datalist.pincode }}, State: {{ datalist.state }} </dd>
+                                <dt>Website:</dt>
+                                <dd>{{ datalist.website }}</dd>
+                                <dt>Land Phone:</dt>
+                                <dd>{{ datalist.land_phone }}</dd>
+                                <dt>Email:</dt>
+                                <dd>{{ datalist.email }}</dd>
+                                <dt>About Industry:</dt>
+                                <dd>{{ datalist.about_industry }}</dd>
+                                <dt>Date Added:</dt>
+                                <dd>{{ datalist.created_at }}</dd>
+                               </dl>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="col-lg-5">
+  <div class="col-lg-12">
+  <b><u>INDUSTRY RESPONSE</u></b>
+  </div>
+<div class="col-lg-12">
+<dl>
+{% if booking_details.industry_response_letter != '' %}
+<dt>Date Added:</dt>
+<dd>{{ booking_details.updated_at }}</dd>
+<dt>Industry Response:</dt>
+<dd>{{ booking_details.industry_response_letter }}</dd>
+<dt>Status:</dt>
+<dd style="text-transform: capitalize">{{ booking_details.status }}</dd>
+{% else %}
+<dt>Industry Response:</dt>
+<dd>No Response Yet</dt>
+{% endif %}
+</dl>
+</div>
+<hr />
+
+<div class="col-lg-12">
+<b><u>MESSAGES</u></b>
+</div>
+
+<div class="col-lg-12">
+<form action="/colleges/add-messages/{{ booking_details.unique_id }}/{{ booking_details.industry_id }}" method="POST" id="form_1">
+    {% csrf_token %}
+<div class="row d-flex justify-content-center">
+        <div class="col-md-12">
+
+          <div class="card" id="chat2">
+            <div class="card-header d-flex justify-content-between align-items-center p-3">
+              <h5 class="mb-0">Chat With Industry</h5>
+            </div>
+            <div class="card-body" data-mdb-perfect-scrollbar="true">
+{% if user_messages.count > 0 %}
+{% for row in user_messages %}
+{% if row.status == 'industry' %}
+<div class="d-flex flex-row justify-content-start mb-4">
+    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+      alt="avatar 1" style="width: 45px; height: 100%;">
+    <div>
+      <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">{{ row.messages_text }}</p>
+      <p class="small ms-3 mb-3 rounded-3 text-muted">Industry {{ row.date_added }}</p>
+    </div>
+  </div>
+{% endif %}
+{% if row.status == 'colleges' %}
+<div class="d-flex flex-row justify-content-end">
+  <div>
+    <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">{{ row.messages_text }}</p>
+    <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">{{ request.session.email }}, {{ row.date_added }}</p>
+  </div>
+  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
+    alt="avatar 1" style="width: 45px; height: 100%;">
+</div>
+{% endif %}
+{% endfor %}
+{% else %}
+<b>No messages added yet</b>
+{% endif %}
+
+            </div>
+            <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+                alt="avatar 3" style="width: 40px; height: 100%;">
+              <input type="text" class="form-control form-control-lg" id="message" name="message" placeholder="Type message">
+              <input type="submit" class="btn btn-success btn-md" value="Send" />
+            </div>
+          </div>
+
+        </div>
+</div>
+</form>
+</div>
+
+</div>
+
+
+
+</div>
+</div>
+</section>
+    <!-- ================ contact section end ================= -->
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#myform" ).validate({
+ ignore: [],
+  rules: {
+     cover_letter: {
+      required: true,
+      minlength: 2,
+      maxlength: 3024
+    },
+    students_details: {
+     required: true,
+     minlength: 2,
+     maxlength: 3024
+   },
+    number_of_students: {
+      required: true,
+      digits: true,
+      minlength: 1,
+      maxlength: 4,
+    },
+    number_of_teachers: {
+      required: true,
+      digits: true,
+      minlength: 1,
+      maxlength: 4,
+    },
+    contact_mobile_number: {
+      required: true,
+      digits: true,
+      minlength: 9,
+      maxlength: 10,
+    },
+    contact_email_address: {
+      required: true,
+      email: true,
+      minlength: 8,
+      maxlength: 255
+    },
+  }
+});
+
+$( "#form_1" ).validate({
+ ignore: [],
+ errorPlacement: function(error, element) {
+error.insertAfter(element.parent());
+},
+  rules: {
+        message: {
+          required: true,
+          minlength: 1,
+          maxlength: 255
+        },
+  }
+});
+
+});
+</script>
+{% endblock %}
